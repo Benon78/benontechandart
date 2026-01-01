@@ -19,6 +19,10 @@ const ContactSection = ({ selectedPlan }) => {
     setIsSubmitting(true);
 
     try {
+
+      if(formData.name.trim() && formData.email.trim() && formData.message.trim()){
+        return null;
+      }
       // Save to database
       const { error } = await supabase.from('contact_submissions').insert({
         name: formData.name.trim(),

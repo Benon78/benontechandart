@@ -14,7 +14,7 @@ A modern, responsive personal portfolio and marketing website showcasing project
 
 ## 🌐 Live Demo
 
-> Add your live demo link here (e.g., https://your-site.netlify.app)
+> live demo(https://benontechandart.netlify.app)
 
 ![Homepage Screenshot](./public/og-image.png)
 
