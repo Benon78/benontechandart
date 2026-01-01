@@ -8,7 +8,7 @@ const Footer = () => {
           {/* Left Section */}
           <div className="flex items-center gap-4">
             <p className="text-muted-foreground text-sm">
-              © 2025 Benon Tech & Art Company. All Rights Reserved.
+              © {new Date().getFullYear()} Benon Tech & Art Company. All Rights Reserved.
             </p>
           </div>
 
