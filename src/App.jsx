@@ -14,6 +14,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ErrorElement from "./pages/ErrorElement";
 import NotFound from "./pages/NotFound";
+import RootLayout from "./components/RootLayout";
 
 import './App.css'
 
@@ -21,7 +22,7 @@ const queryClient = new QueryClient();
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
+    <Route element={<RootLayout/>} errorElement={<ErrorElement/>}>  
       <Route path="/" element={<Index />} errorElement={<ErrorElement />} />
       <Route path="/auth" element={<Auth />} errorElement={<ErrorElement />} />
       <Route path="/admin" element={<Admin />} errorElement={<ErrorElement />} />
@@ -33,7 +34,7 @@ const router = createBrowserRouter(
       <Route path="/terms-of-service" element={<TermsOfService />} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL */}
       <Route path="*" element={<NotFound />} />
-    </>
+    </Route>
   )
 );
 
