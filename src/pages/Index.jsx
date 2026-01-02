@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -6,13 +5,15 @@ import ServicesSection from '@/components/ServicesSection';
 import PortfolioSection from '@/components/PortfolioSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import PricingSection from '@/components/PricingSection';
+import BlogSection from '@/components/BlogSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
+import { useState } from 'react';
 
 const Index = () => {
-   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedPlan, setSelectedPlan] = useState(null)
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       <main>
         <HeroSection />
@@ -20,7 +21,8 @@ const Index = () => {
         <ServicesSection />
         <PortfolioSection />
         <TestimonialsSection />
-        <PricingSection setSelectedPlan = {setSelectedPlan}/>
+        <PricingSection setPlan={setSelectedPlan}/>
+        <BlogSection />
         <ContactSection selectedPlan = {selectedPlan} />
       </main>
       <Footer />
