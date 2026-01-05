@@ -6,7 +6,7 @@ import ServicesSection from '@/components/ServicesSection';
 import PortfolioSection from '@/components/PortfolioSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import PricingSection from '@/components/PricingSection';
-import BlogSection from '@/components/BlogSection';
+// import BlogSection from '@/components/BlogSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import { useState } from 'react';
@@ -24,7 +24,7 @@ const Index = () => {
         <PortfolioSection />
         <TestimonialsSection />
         <PricingSection setPlan={setSelectedPlan}/>
-        <BlogSection />
+        {/* <BlogSection /> */}
         <ContactSection selectedPlan = {selectedPlan} />
       </main>
       <Footer />
