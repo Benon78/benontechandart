@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import Header from '@/components/Header';
+import Seo from '@/components/Seo';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -115,6 +116,7 @@ const Gallery = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo title="Gallery — Benon Tech & Art" description="Explore Benon Tech & Art's creative portfolio across photography, web and branding." />
       <Header />
       <main className="pt-24 pb-20">
         <div className="container mx-auto px-4 lg:px-8">

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Mail, Lock, ArrowLeft } from 'lucide-react';
+import Seo from '@/components/Seo';
 import logo from '@/assets/logo.jpeg';
 import { toast } from '@/hooks/use-toast';
 
@@ -114,8 +115,9 @@ const Auth = () => {
     );
   }
 
-   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+  return (
+   <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <Seo title="Sign In / Sign Up — Benon Tech & Art" description="Access your Benon Tech & Art account or create a new one." />
       <div className="w-full max-w-md">
         <a href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary mb-8 transition-colors">
           <ArrowLeft size={16} />

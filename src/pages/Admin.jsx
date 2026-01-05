@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Seo from '@/components/Seo';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { 
@@ -258,6 +259,10 @@ const Admin = () => {
         published: blogForm.published,
         author_id: user.id,
       });
+
+    await supabase.functions.invoke('send-blog-notification', {
+      body: { blogTitle: blogForm.title, blogSlug: blogForm.slug, blogExcerpt: blogForm.excerpt},
+    })
       
       if (!error) {
         toast({ title: 'Blog created successfully' });
@@ -455,6 +460,7 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo title="Admin — Benon Tech & Art" description="Admin dashboard for Benon Tech & Art." />
       {/* Hidden file input for blog */}
       <input type="file" ref={blogImageInputRef} className="hidden" accept="image/*" onChange={handleBlogImageChange} />
 

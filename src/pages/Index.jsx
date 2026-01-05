@@ -1,4 +1,5 @@
 import Header from '@/components/Header';
+import Seo from '@/components/Seo';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
 import ServicesSection from '@/components/ServicesSection';
@@ -14,6 +15,7 @@ const Index = () => {
   const [selectedPlan, setSelectedPlan] = useState(null)
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      <Seo title="Benon Tech & Art — Home" description="Benon Tech & Art — creative digital agency blending technology and art. Services, portfolio, blog and contact." />
       <Header />
       <main>
         <HeroSection />

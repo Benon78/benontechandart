@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Calendar, Heart, MessageCircle, Star, ArrowLeft, Send } from 'lucide-react';
 import Header from '@/components/Header';
+import Seo from '@/components/Seo';
 import Footer from '@/components/Footer';
+import { sanitizeHtml } from '@/lib/utils';
+import { markdownToHtml, looksLikeMarkdown } from '@/lib/markdown';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -188,6 +191,41 @@ const BlogPost = () => {
     });
   };
 
+  // Format post content: support Markdown and HTML. Convert markdown to HTML then sanitize.
+  // If content is plain text, escape and convert newlines to paragraphs.
+  const formatContent = (content) => {
+    if (!content) return '';
+    // Normalize newlines
+    const original = content.replace(/\r\n/g, '\n');
+
+    // If it looks like markdown, convert to HTML and sanitize
+    if (looksLikeMarkdown(original)) {
+      return markdownToHtml(original);
+    }
+
+    // If it contains HTML tags, sanitize and return
+    if (/<[a-z][\s\S]*>/i.test(original)) {
+      return sanitizeHtml(original);
+    }
+
+    // Plain text: escape and convert newlines to paragraphs
+    const escapeHtml = (unsafe) =>
+      unsafe
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+    const txt = escapeHtml(original);
+    const paragraphs = txt.split(/\n{2,}/).map((p) => {
+      const withBr = p.split('\n').join('<br/>');
+      return `<p>${withBr}</p>`;
+    });
+
+    return paragraphs.join('');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -202,6 +240,14 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {post && (
+        <Seo
+          title={`${post.title} — Benon Tech & Art`}
+          description={post.excerpt || post.title}
+          image={post.cover_image}
+          url={typeof window !== 'undefined' ? window.location.href : undefined}
+        />
+      )}
       <Header />
       <main className="pt-24 pb-20">
         <article className="container mx-auto px-4 lg:px-8 max-w-4xl">
@@ -254,7 +300,7 @@ const BlogPost = () => {
           {/* Post Content */}
           <div
             className="prose prose-invert max-w-none mb-12"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: formatContent(post.content) }}
           />
 
           {/* Comments Section */}

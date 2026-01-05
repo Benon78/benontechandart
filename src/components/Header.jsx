@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, User } from 'lucide-react';
+import { Menu, X, LogOut, User, UserCog } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 // import { User as SupabaseUser } from '@supabase/supabase-js';
 import logo from '@/assets/logo.jpeg';
@@ -11,11 +11,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ const Header = () => {
         if (session?.user) {
           setTimeout(() => {
             fetchUserAvatar(session.user.id);
+            checkAdminRole(session.user.id);
           }, 0);
         } else {
           setAvatarUrl(null);
@@ -49,6 +52,7 @@ const Header = () => {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchUserAvatar(session.user.id);
+        checkAdminRole(session.user.id);
       }
     });
 
@@ -112,6 +116,22 @@ const Header = () => {
     }
   };
 
+    const checkAdminRole = async (userId) => {
+    const { data, error } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (data) {
+      setIsAdmin(true);
+      fetchData();
+    } else {
+      setIsAdmin(false);
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -140,6 +160,7 @@ const Header = () => {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-4">
+            <ThemeToggle />
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger className="focus:outline-none">
@@ -151,6 +172,10 @@ const Header = () => {
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
+                 { isAdmin && <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
+                    <UserCog className="mr-2 h-4 w-4" />
+                    Admin
+                  </DropdownMenuItem>}
                   <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     Profile
@@ -190,6 +215,9 @@ const Header = () => {
         {isMobileMenuOpen && (
           <nav className="lg:hidden bg-background/95 backdrop-blur-md py-6 px-4 border-t border-primary/20">
             <div className="flex flex-col gap-4">
+              <div className="flex justify-end">
+                <ThemeToggle />
+              </div>
               {navLinks.map((link) => (
                 <button
                   key={link.name}
@@ -201,12 +229,22 @@ const Header = () => {
               ))}
               {user ? (
                 <>
+                  {isAdmin && <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      navigate('/admin');
+                    }}
+                    className="mt-1 inline-flex justify-center items-center gap-2 px-6 py-2.5 border border-primary/50 text-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-all duration-300"
+                  >
+                    <UserCog size={16} />
+                    Admin
+                  </button>}
                   <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       navigate('/profile');
                     }}
-                    className="mt-4 inline-flex justify-center items-center gap-2 px-6 py-2.5 border border-primary/50 text-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-all duration-300"
+                    className="inline-flex justify-center items-center gap-2 px-6 py-2.5 border border-primary/50 text-foreground rounded-full text-sm font-medium hover:border-primary hover:text-primary transition-all duration-300"
                   >
                     <User size={16} />
                     Profile

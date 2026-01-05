@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -45,9 +47,11 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
+    "dompurify": "^2.4.0",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.462.0",
+    "marked": "^5.1.1",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
@@ -65,6 +69,10 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@tailwindcss/typography": "^0.5.16",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/dompurify": "^3.0.5",
+    "@types/marked": "^5.0.2",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
@@ -74,9 +82,16 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
+    "jsdom": "^22.1.0",
     "lovable-tagger": "^1.1.13",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
-    "vite": "^5.4.19"
+    "vite": "^5.4.19",
+    "vitest": "^1.4.4"
+  },
+  "vitest": {
+    "test": {
+      "environment": "jsdom"
+    }
   }
 }

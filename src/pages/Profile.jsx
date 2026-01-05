@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Seo from '@/components/Seo';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, LogOut, Home, Bell, BellOff, Calendar, Clock, Camera, Save, User as UserIcon } from 'lucide-react';
@@ -239,6 +240,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo title="Profile — Benon Tech & Art" description="Your Benon Tech & Art profile and settings." />
       {/* Header */}
       <header className="border-b border-primary/20 bg-card/50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">

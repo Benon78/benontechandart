@@ -1,9 +1,11 @@
 import Header from '@/components/Header';
+import Seo from '@/components/Seo';
 import Footer from '@/components/Footer';
 
 const TermsOfService = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <Seo title="Terms of Service — Benon Tech & Art" description="Terms of service for Benon Tech & Art." />
       <Header />
       <main className="flex-1 pt-24 pb-16">
         <div className="container mx-auto px-4 lg:px-8 max-w-4xl">

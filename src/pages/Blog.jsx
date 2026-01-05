@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Heart, MessageCircle, User } from 'lucide-react';
 import Header from '@/components/Header';
+import Seo from '@/components/Seo';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -50,6 +51,7 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo title="Blog — Benon Tech & Art" description="Latest articles, tutorials and insights from Benon Tech & Art." />
       <Header />
       <main className="pt-24 pb-20">
         <div className="container mx-auto px-4 lg:px-8">

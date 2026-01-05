@@ -1,5 +1,6 @@
 import { useRouteError } from "react-router-dom";
 import Header from '@/components/Header';
+import Seo from '@/components/Seo';
 import Footer from '@/components/Footer';
 
 const ErrorElement = () => {
@@ -7,6 +8,7 @@ const ErrorElement = () => {
 
   return (
     <>
+     <Seo title="Error — Benon Tech & Art" description="An unexpected error occurred." />
      <Header />
       <section className="section-padding flex flex-col items-center justify-center min-h-[60vh]">
         <h1 className="text-5xl font-heading font-bold text-destructive mb-4">Oops!</h1>
