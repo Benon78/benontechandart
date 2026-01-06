@@ -88,6 +88,24 @@
         ]
       }
     </script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QX7FB0TY5L"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+       /* Default: deny tracking until consent */
+        gtag('consent', 'default', {
+          ad_storage: 'denied',
+          analytics_storage: 'denied'
+        });
+        
+      gtag('js', new Date());
+      gtag('config', 'G-QX7FB0TY5L', {
+        anonymize_ip: true,
+        send_page_view: true
+      });
+    </script>
+
   </head>
 
   <body>

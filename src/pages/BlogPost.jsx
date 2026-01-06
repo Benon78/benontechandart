@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Calendar, Heart, MessageCircle, Star, ArrowLeft, Send } from 'lucide-react';
 import Header from '@/components/Header';
 import Seo from '@/components/Seo';
@@ -10,11 +10,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { event } from '@/lib/analytics';
 
 const BlogPost = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const location = useLocation()
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [likesCount, setLikesCount] = useState(0);
@@ -39,6 +41,27 @@ const BlogPost = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+  const onScroll = () => { 
+    const progress =
+      (window.scrollY + window.innerHeight) /
+      document.documentElement.scrollHeight;
+
+    if (progress > 0.6) {
+      event({
+        action: 'blog_read',
+        category: 'engagement',
+        label: document.title,
+      });
+      window.removeEventListener('scroll', onScroll);
+    }
+  };
+
+  window.addEventListener('scroll', onScroll);
+  return () => window.removeEventListener('scroll', onScroll);
+}, []);
+
 
   useEffect(() => {
     if (slug) {
@@ -344,9 +367,17 @@ const BlogPost = () => {
             ) : (
               <div className="bg-card/50 rounded-lg p-6 mb-8 text-center">
                 <p className="text-muted-foreground mb-4">Sign in to leave a comment</p>
-                <Link to="/auth">
-                  <Button>Sign In</Button>
-                </Link>
+                      <Button
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          // Store the current path for redirect after login
+                          sessionStorage.setItem('redirectTo', location.pathname + location.search);
+                        }
+                        navigate('/auth');
+                      }}
+                    >
+                      Sign In
+                    </Button>
               </div>
             )}
 

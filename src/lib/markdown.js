@@ -1,6 +1,12 @@
 import { marked } from 'marked';
 import createDOMPurify from 'dompurify';
 
+// Disable deprecated headerIds option
+marked.setOptions({
+  headerIds: false, // prevents the warning
+  mangle: false,    // optional: keep header text intact
+});
+
 export function markdownToHtml(md = '') {
   if (typeof md !== 'string' || !md) return '';
   // Convert markdown to HTML then sanitize

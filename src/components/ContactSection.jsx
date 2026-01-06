@@ -3,6 +3,7 @@ import { MessageCircle, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { toast } from '@/hooks/use-toast';
+import { event } from '@/lib/analytics';
 
 const ContactSection = ({ selectedPlan }) => {
   const [formData, setFormData] = useState({
@@ -98,6 +99,13 @@ const ContactSection = ({ selectedPlan }) => {
                   ? `Hello, I’m interested in the ${selectedPlan.name} package priced at ${selectedPlan.price}. I would like to discuss project details and next steps.`
                   : `Hello, I would like to inquire about your services.`
               )}`}
+                onClick={() =>
+                event({
+                  action: 'whatsapp_click',
+                  category: 'conversion',
+                  label: 'pricing_section',
+                })
+              }
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 mb-8 px-6 py-3 bg-green-600 text-white rounded-full text-sm font-medium hover:bg-green-700 transition-colors"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,  useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Mail, Lock, ArrowLeft } from 'lucide-react';
 import Seo from '@/components/Seo';
@@ -14,6 +14,12 @@ const Auth = () => {
   const [error, setError] = useState('');
   const [checkingAuth, setCheckingAuth] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation()
+
+  const redirectPath =
+  location.state?.from?.pathname ||
+  sessionStorage.getItem('redirectTo') ||
+  null;
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -41,6 +47,14 @@ const Auth = () => {
   }, [navigate]);
 
     const checkRoleAndRedirect = async (userId) => {
+    // Priority 1: redirect back to where user came from
+      if (redirectPath) {
+        sessionStorage.removeItem('redirectTo');
+        navigate(redirectPath, { replace: true });
+        return;
+      }
+
+    // Priority 2: role-based fallback
     const { data } = await supabase
       .from('user_roles')
       .select('role')

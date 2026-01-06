@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import BookingModal from './BookingModal';
+import { event } from '@/lib/analytics';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const pricingPlans = [
   {
@@ -54,6 +58,69 @@ const pricingPlans = [
 const PricingSection = ({ setPlan }) => {
    const { ref, isVisible } = useScrollAnimation();
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [user, setUser] = useState(null);
+  const { toast } = useToast();
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+  // Check if there's a stored plan to auto-open modal after login
+  const savedSelectedPlan = sessionStorage.getItem('selectedPlan');
+  const savedPlan = sessionStorage.getItem('plan');
+  if (savedSelectedPlan && savedPlan && user) {
+    const selectedPlanObj = JSON.parse(savedSelectedPlan);
+    const planObj = JSON.parse(savedPlan);
+    setSelectedPlan(selectedPlanObj);
+    setPlan(planObj);
+
+    // Clear session storage so it doesn’t repeat
+    sessionStorage.removeItem('selectedPlan');
+    sessionStorage.removeItem('plan');
+    sessionStorage.removeItem('redirectTo');
+  }
+}, [user]);
+
+
+  const handleBookNow = (plan) => {
+    if (!user) {
+       // Save redirect info in session storage
+    sessionStorage.setItem('redirectTo', location.pathname + location.search);
+
+    // Optional: store selected plan too
+    sessionStorage.setItem('selectedPlan', JSON.stringify({ name: plan.name, price: plan.price }));
+    sessionStorage.setItem('plan', JSON.stringify(plan));
+
+      toast({
+        title: 'Sign in required',
+        description: 'Please sign in to book this package for a better experience.',
+        variant: 'destructive',
+      });
+
+      navigate('/auth')
+      return;
+    }
+
+    setSelectedPlan({ name: plan.name, price: plan.price });
+    setPlan(plan);
+    event({
+      action: 'pricing_select',
+      category: 'pricing',
+      label: plan.name,
+      value: plan.price,
+    });
+  };
 
   return (
     <section id="pricing" className="py-20 lg:py-28 bg-secondary/30">
@@ -107,7 +174,9 @@ const PricingSection = ({ setPlan }) => {
               </ul>
 
               <button
-                onClick={() =>{ setSelectedPlan({ name: plan.name, price: plan.price }); setPlan(plan)}}
+                onClick={() => 
+                  handleBookNow(plan)
+                }
                 className={`block w-full text-center py-3 rounded-full text-sm font-medium transition-all duration-300 ${
                   plan.highlighted
                     ? 'bg-primary text-primary-foreground hover:opacity-90'

@@ -260,11 +260,11 @@ const Admin = () => {
         author_id: user.id,
       });
 
-    await supabase.functions.invoke('send-blog-notification', {
-      body: { blogTitle: blogForm.title, blogSlug: blogForm.slug, blogExcerpt: blogForm.excerpt},
-    })
       
       if (!error) {
+        await supabase.functions.invoke('send-blog-notification', {
+          body: { blogTitle: blogForm.title, blogSlug: blogForm.slug, blogExcerpt: blogForm.excerpt},
+        })
         toast({ title: 'Blog created successfully' });
         fetchData();
         resetBlogForm();

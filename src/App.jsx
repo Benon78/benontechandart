@@ -15,6 +15,9 @@ import TermsOfService from "./pages/TermsOfService";
 import ErrorElement from "./pages/ErrorElement";
 import NotFound from "./pages/NotFound";
 import RootLayout from "./components/RootLayout";
+import CookieConsent from '@/components/CookieConsent';
+import CookiePolicy from '@/pages/CookiePolicy';
+import AnalyticsPolicy from '@/pages/AnalyticsPolicy';
 
 import './App.css'
 
@@ -32,7 +35,8 @@ const router = createBrowserRouter(
       <Route path="/blog/:slug" element={<BlogPost />} errorElement={<ErrorElement />}/>
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-service" element={<TermsOfService />} />
-      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL */}
+      <Route path="/cookie-policy" element={<CookiePolicy />} />
+      <Route path="/analytics-policy" element={<AnalyticsPolicy />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )
@@ -41,6 +45,7 @@ const router = createBrowserRouter(
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <CookieConsent/>
       <Toaster />
       <Sonner />
       <RouterProvider router={router} />

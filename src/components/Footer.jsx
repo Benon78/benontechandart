@@ -159,6 +159,22 @@ const Footer = () => {
                   Terms of Service
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/cookie-policy"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Cookie Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/analytics-policy"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Analytics Policy
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

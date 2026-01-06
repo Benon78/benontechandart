@@ -13,7 +13,7 @@ const Blog = () => {
   useEffect(() => {
     fetchPosts();
   }, []);
-
+ 
   const fetchPosts = async () => {
     const { data } = await supabase
       .from('blog_posts')
